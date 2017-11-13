@@ -1,10 +1,12 @@
-
+<!Doctype HTML>
 <html>
 <title>Sign UP</Title>
 <head>
-<font size="10" color="white"><center>Sign up</center></font>
+<font size="10" color="white"><center>Sign up</center>
+
+
 <style>
-.error {color: #FF0000;}
+.error {color: red;}
 </style>
 </head>
 <body background="680411.jpg"><br>
@@ -16,38 +18,191 @@
 
 
 
+<?php
+
+
+
+$q=1;
+
+$fnameErr = $lnameErr = $addressErr = $zipErr = $emailErr =$phoneErr = $passwordErr = $cpasswordErr = $genderErr  = $dobErr = $courseErr = $countryErr = "";
+$fname = $lname = $address = $zip = $email =$phone = $password = $cpassword = $gender  = $dob = $course = $country = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") 
+
+{
+
+  if (empty($_POST["fname"])) {
+$q=0;
+    $fnameErr = "First Name is required";
+  } else {
+    $fname = test_input($_POST["fname"]);
+  }
+  if (empty($_POST["lname"])) {
+$q=0;
+    $lnameErr = "Last Name is required";
+  } else {
+    $lname = test_input($_POST["lname"]);
+  }
+  
+  if (empty($_POST["address"])) {
+$q=0;
+    $addressErr = "Address is required";
+  } else 
+ {
+    $address = test_input($_POST["address"]);
+  }
+  if (empty($_POST["zip"])) {
+$q=0;
+    $zipErr = "Zip code is required";
+  } else {
+    $zip = test_input($_POST["zip"]);
+  }
+  
+  
+  if (empty($_POST["email"])) {
+$q=0;
+    $emailErr = "Email is required";
+  } else {
+    $email = test_input($_POST["email"]);
+  }
+  if (empty($_POST["phone"])) {
+$q=0;
+    $phoneErr = "phone is required";
+  } else {
+    $phone = test_input($_POST["phone"]);
+  }
+    
+  if (empty($_POST["password"])) {
+$q=0;
+    $passwordErr = "password is required";
+  } else {
+    $password = test_input($_POST["password"]);
+  }
+
+  if (empty($_POST["cpassword"])) {
+$q=0;
+    $cpasswordErr = "password is required";
+  } else {
+    $cpassword = test_input($_POST["cpassword"]);
+  }
+
+  if (empty($_POST["gender"])) {
+$q=0;
+    $genderErr = "Gender is required";
+  } else {
+    $gender = test_input($_POST["gender"]);
+  }
+  if (empty($_POST["dob"])) {
+$q=0;
+    $dobErr = "date of birth is required";
+  } else {
+    $dob = test_input($_POST["dob"]);
+  }
+  if (empty($_POST["course"])) {
+$q=0;
+    $courseErr = "course is required";
+  } else {
+    $course = test_input($_POST["course"]);
+  }if (empty($_POST["country"])) {
+$q=0;
+    $countryErr = "country is required";
+  } else {
+    $country = test_input($_POST["country"]);
+  }
+ 
+}
+
+
+$fname=$_POST['fname'];
+$lname=$_POST['lname'];
+$address=$_POST['address'];
+$zip=$_POST['zip'];
+$mail=$_POST['email'];
+$phone=$_POST['phone'];
+$password=$_POST['password'];
+
+
+$gender=$_POST['gender'];
+$dob=$_POST['dob'];
+$course=$_POST['course'];
+
+$country=$_POST['country'];
+
+$con=mysqli_connect("localhost","root","root","form");
+if(!$con)
+{
+die("Connection Failed :".mysqli_connect_error());
+}
+
+$sql=mysqli_query($con,"Insert into user values('$fname','$lname','$address',$zip,'$mail',$phone,'$password','$gender','$dob','$course','$country')");
+
+
+$sql1="select * from user where phn='$phone' AND password='$password';";
+
+
+$result=mysqli_query($con,$sql1);
+if($sql)
+{
+echo "New Record Created Successfully";
+echo "<br>";
+while($row = mysqli_fetch_assoc($result))
+{
+echo "<br>WELCOME ".$row["fname"];
+}
+
+}
+else
+{
+echo "ERROR: ".$sql."<br>".mysqli_error($con);
+}
+
+
+
+function test_input($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
+?>
+
+
+<p><span class="error">* required field.</span></p>
 
 
 
 
-    <form  class="pure-form" method="post"  action="1.php" >
+
+
+</font>
+    <form  method="post" class="pure-form" action="1.php" >
 
 <font Size="5" color="white">
 
 <fieldset>
 <fieldset>
-<legend>Name</Legend>     First Name: <input type="text" name="fname"  >
+<legend>Name</Legend>     First Name: <input type="text" name="fname" value="" >
 <span class="error">* <?php echo $fnameErr;?></span><br><br>
 
-     Last Name: <input type="text" name="lname"  >
+     Last Name: <input type="text" name="lname" value="" >
 	 <span class="error">* <?php echo $lnameErr;?></span>
 	 <br><br>
 	   
 </fieldset>
 
 <Legend>Address</Legend>
-<fieldset>Address: <input type="text" name="address" >
+<fieldset>Address: <input type="text" name="address" value="" >
 <span class="error">* <?php echo $addressErr;?></span>
 <br>
 <br>
-Zipcode: <input type="number" name="zip" min="1" max="999999"  >
+Zipcode: <input type="number" name="zip" min="1" max="999999" >
 <span class="error">* <?php echo $zipErr;?></span>
 </fieldset>
 <br>
 <br>
 <fieldset>
 <Legend>Contact details</Legend>
-Email: <input type="email" name="email"  >
+Email: <input type="email" name="email" value="" >
 <span class="error">* <?php echo $emailErr;?></span>
 <br>
 <br>
@@ -59,11 +214,11 @@ Phone:  <input type="number" name="phone" min="1000000000" max="9999999999" >
 <Legend>Password</Legend>
 Password: 
        
-            <input type="text" name="pass" id="password" >
+            <input type="password" name="password" id="password" >
 			<span class="error">* <?php echo $passwordErr;?></span>
    <br><br>  
 Confirm Password:
-            <input type="password" name="cpassword"  id="cpassword" >
+            <input type="password" name="cpassword" id="cpassword" >
 			<span class="error">* <?php echo $cpasswordErr;?></span>
 <br><br>
 </fieldset>
@@ -81,7 +236,7 @@ Confirm Password:
 <fieldset>
 <legend>Gender</legend>
 <input type="radio" name="gender" value="male"  > male
-&nbsp&nbsp&nbsp&nbsp<input type="radio" name="gender" value="female" > female
+&nbsp&nbsp&nbsp&nbsp<input type="radio" name="gender" value="female"> female
 
 <span class="error">* <?php echo $genderErr;?></span>
 </fieldset><br>
@@ -90,7 +245,7 @@ Confirm Password:
 <fieldset>
 <Legend>Birth details</Legend>
 Date Of Birth:&nbsp
-<input type="text" name="dob" placeholder="yyyy/mm/dd" >
+<input type="date" name="dob" min="1950-01-01" max="2002-12-31" >
 <span class="error">* <?php echo $dobErr;?></span>
 <br><br>
 </fieldset>
@@ -101,12 +256,12 @@ Date Of Birth:&nbsp
 Select your course:
 <select name="course" >
 <option disabled selected value> -- select an option -- </option>
- <option value="Computer Science">Computer Science</option>
- <option value="Mechanical">Mechanical</option>
- <option value="Electronics And Communication">Electronics And Communication</option>
- <option value="Electrical">Electrical</option>
- <option value="Civil">Civil</option>
- <option value="Biotechnology">Biotechnology</option>
+ <option value="apple">Computer Science</option>
+ <option value="banana">Mechanical</option>
+ <option value="plum">Electronics And Communication</option>
+ <option value="pomegranate">Electrical</option>
+ <option value="strawberry">Civil</option>
+ <option value="watermelon">Biotechnology</option>
 </select>
 <span class="error">* <?php echo $courseErr;?></span>
 </fieldset>
@@ -116,7 +271,7 @@ Select your course:
 <fieldset>
 <Legend>Nationality</Legend>
 Select Your Country:
-<select name="country">
+<select name="country" >
     <option disabled selected value> -- select an option -- </option>
     <option value="Afghanistan">Afghanistan</option>
     <option value="Albania">Albania</option>
@@ -365,8 +520,8 @@ Select Your Country:
 <input type="reset">
 <input type="submit" onclick="return Validate()" value="submit" name="submit">
 </font>
-
+</form>
            
-    </form>
+    
 </body>
 </html>
